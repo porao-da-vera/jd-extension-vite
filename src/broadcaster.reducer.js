@@ -23,12 +23,12 @@ function reducer(state, { type, payload }) {
     case LIST_ACTION_TYPE.CHANGE:
       return {
         ...state,
-        listConfig: payload,
+        listConfig: payload.listConfig,
       };
     case LIST_ACTION_TYPE.DELETE:
       return {
         ...state,
-        listConfig: payload,
+        listConfig: payload.listConfig,
         songList: [],
       };
     case "setListStatus":

@@ -30,7 +30,6 @@ export const viewerListener = ({ opaque_user_id, dispatch }) => {
         payload: {
           listConfig: listStatus,
           requestedSongs: list,
-          requestedIds: list.map((song) => song.song.id),
           tickets,
           display_name,
         },

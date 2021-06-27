@@ -51,9 +51,11 @@ const Broadcaster = () => {
       state.listConfig.status === LIST_STATUS.PAUSED) ? (
     <Wrapper>
       <ListStatus
-        songListStatus={state.listConfig.status}
+        listConfig={state.listConfig}
+        currentAmount={state.songList.length}
+        dancedAmount={state.songList.filter(song => song.song.danced).length}
         onChange={(value) =>
-          dispatch({ type: "setListConfig", payload: value })
+          dispatch({ type: "setListConfig", payload: { listConfig: value } })
         }
         changeListStatus={changeListStatus}
         deleteList={deleteList}

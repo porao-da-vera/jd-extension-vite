@@ -65,7 +65,7 @@ const Panel = () => {
     const list = state.songList;
     dispatch({
       type: "setFilteredSongs",
-      payload: handleFilter(debouncedFilter, list, state.requestedIds),
+      payload: handleFilter(debouncedFilter, list, state.requestedSongs),
     });
   }, [debouncedFilter, state.songList]);
 
@@ -119,7 +119,6 @@ const Panel = () => {
                 ? 'There aren\'t musics here yet 😶.\n You can be the first to ask one, by clicking on the "+" button at the top right corner'
                 : 'There aren\'t musics here yet 😶.\n As soon as the streamer allow, you can be the first by clicking on the "+" button at the top right corner.'}
             </ListWarning>
-            ;
           </Main>
         </>
       );

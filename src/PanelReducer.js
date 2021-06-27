@@ -1,6 +1,7 @@
 const initialState = {
   songList: [],
   filteredSongs: [],
+  requestedSongs: [],
   display_name: "",
   filter: { searchString: "", difficulty: 0, mode: 0 },
   tickets: -1,
@@ -9,13 +10,11 @@ const initialState = {
   loading: true,
   error: null,
   unlimited: true,
-  requestedIds: [],
   extremeCost: null,
   bannedCost: null,
   bannedIds: [],
   config: null,
   gameList: null,
-  requestedSongs: null,
   isRequestView: false,
   listConfig: null,
   handleAddSongError: "",
@@ -47,12 +46,26 @@ function reducer(state, { type, payload }) {
         loading: false,
       };
     case "setListConfig":
-    case LIST_ACTION_TYPE.ADD:
     case LIST_ACTION_TYPE.CHANGE:
-    case LIST_ACTION_TYPE.DELETE:
       return {
         ...state,
-        listConfig: payload,
+        listConfig: payload.listConfig,
+      };
+    case LIST_ACTION_TYPE.ADD:
+      return {
+        ...state,
+        listConfig: payload.listConfig,
+        requestedSongs: [],
+      };
+    case LIST_ACTION_TYPE.DELETE:
+      console.info(payload);
+      const userId = window.Twitch.ext.viewer.id;
+      const tickets = payload.ticketsToReturn[userId] + state.tickets;
+      return {
+        ...state,
+        listConfig: payload.listConfig,
+        tickets,
+        requestedSongs: [],
       };
     case "setSongList":
       return {
@@ -142,11 +155,12 @@ function reducer(state, { type, payload }) {
         ),
       };
     case SONG_ACTION_TYPE.DELETE:
+      const newList = state.requestedSongs.filter(
+        (song) => song.song.id !== payload.songId
+      );
       return {
         ...state,
-        requestedSongs: state.requestedSongs.filter(
-          (song) => song.song.id !== payload.songId
-        ),
+        requestedSongs: newList,
       };
     default:
       return state;

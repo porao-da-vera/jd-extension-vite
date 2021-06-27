@@ -13,11 +13,32 @@ export const StatusWrapper = styled.div`
   height: 40px;
 `;
 
+export const LeftSide = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const StatusToggle = styled.div`
-  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   display: flex;
   flex-direction: row;
-  width: 50%;
+`;
+export const ListConfigWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-right: 4px;
+  background-color: ${COLORS.GRAY};
+  color: #fff;
+  fill: #fff;
+  border-radius: 4px;
+  padding: 2px 4px;
+`;
+export const ListConfigIcon = styled.div`
+  display: flex;
+  margin-right: 4px;
+`;
+export const ListConfigAmount = styled.div`
+  display: flex;
 `;
 
 export const ConfigBroadcaster = styled.button`

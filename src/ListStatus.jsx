@@ -7,13 +7,26 @@ import {
   StatusToggle,
   ConfigBroadcaster,
   ConfigContainer,
+  LeftSide,
+  ListConfigWrapper,
+  ListConfigIcon,
+  ListConfigAmount
 } from "./ListStatus.styled";
 import BroadcasterForm from "./BroadcasterForm";
 
-import { Cog, CloseIcon } from "./icons";
+import { Cog, CloseIcon, PerStreamIcon, PerViewerIcon, SongListIcon, DancedIcon } from "./icons";
+
+const ListConfig = ({icon, amount}) => (
+  <ListConfigWrapper>
+    <ListConfigIcon>{icon}</ListConfigIcon>
+    <ListConfigAmount>{amount}</ListConfigAmount>
+  </ListConfigWrapper>
+)
 
 const ListStatus = ({
-  songListStatus,
+  listConfig,
+  currentAmount,
+  dancedAmount,
   changeListStatus,
   deleteList,
   dispatch,
@@ -43,13 +56,20 @@ const ListStatus = ({
   return (
     <div>
       <StatusWrapper>
-        <StatusToggle>
-          {songListStatus}&nbsp;
-          <Toggle
-            value={songListStatus === LIST_STATUS.ACTIVE}
-            onChange={handleChangeStatus}
-          />
-        </StatusToggle>
+        <LeftSide>
+          <StatusToggle>
+            {listConfig.status}&nbsp;
+            <Toggle
+              value={listConfig.status === LIST_STATUS.ACTIVE}
+              onChange={handleChangeStatus}
+            />
+          </StatusToggle>
+          <ListConfig icon={<SongListIcon size={20} />} amount={currentAmount} />
+          <ListConfig icon={<DancedIcon size={20} />} amount={dancedAmount} />
+          <ListConfig icon={<PerStreamIcon size={20} />} amount={listConfig.perStream} />
+          <ListConfig icon={<PerViewerIcon size={20} />} amount={listConfig.perViewer} />
+          
+        </LeftSide>
 
         <ConfigBroadcaster onClick={() => setShowConfig(!showConfig)}>
           {showConfig ? <CloseIcon /> : <Cog />}

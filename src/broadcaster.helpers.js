@@ -9,7 +9,7 @@ export const listenBroadcaster = ({
     .then((result) => {
       const { listStatus, list } = result;
       setSongList(list);
-      setListConfig(listStatus);
+      setListConfig({ listConfig: listStatus });
     })
     .catch((error) => {
       console.log(error);
