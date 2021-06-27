@@ -1,10 +1,9 @@
 import React from 'react'
+import Panel from './Panel'
 
 const VideoOverlay = () => {
   return (
-    <div style={{color: 'white'}}>
-      Video overlay
-    </div>
+    <Panel />
   )
 }
 

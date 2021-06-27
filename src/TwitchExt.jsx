@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-
-import { createContext, useContextSelector } from 'use-context-selector';
+import React, { useState, useEffect } from "react";
+import jwtDecode from "jwt-decode";
+import { createContext, useContextSelector } from "use-context-selector";
+import { LOCAL_STORAGE_TOKEN_KEY } from "./constants";
 
 export const TwitchExtContext = createContext();
 
@@ -17,7 +18,7 @@ const updateConfigFromListener = (
 ) => {
   const { type, data } = JSON.parse(msg);
   if (
-    type === "config" &&
+    type === "configChange" &&
     JSON.stringify(data) !== JSON.stringify(config)
   ) {
     setConfig(data);
@@ -30,10 +31,20 @@ export const TwitchExtProvider = ({ children }) => {
 
   useEffect(() => {
     twitch.onAuthorized((auth) => {
-      setAuth(auth);
+      const decodedToken = jwtDecode(auth.token);
+      const { user_id, channel_id } = decodedToken;
+      const newAuth = {
+        ...decodedToken,
+        channelId: channel_id,
+        userId: user_id,
+      };
+      setAuth(newAuth);
+      window.localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, auth.token);
     });
     // init config
     const configJson = twitch.configuration.broadcaster?.content;
+
+    rigLog(config);
     if (configJson) {
       try {
         setConfig(JSON.parse(configJson));
@@ -43,11 +54,17 @@ export const TwitchExtProvider = ({ children }) => {
     } else {
       try {
         twitch.configuration.onChanged(() => {
-          let newConfig = twitch.configuration.broadcaster?.content;
-          if (newConfig) {
-            newConfig = JSON.parse(newConfig);
+          const broadcaster = twitch.configuration.broadcaster;
+          if (broadcaster?.content) {
+            try {
+              const config = JSON.parse(broadcaster.content);
+
+              rigLog(config);
+              setConfig(config);
+            } catch (e) {
+              console.log(e);
+            }
           }
-          setConfig(newConfig);
         });
       } catch (error) {
         throw new Error(error);
@@ -60,7 +77,6 @@ export const TwitchExtProvider = ({ children }) => {
       window.Twitch.ext.unlisten("broadcast", updateConfigFromListener);
     };
   }, []);
-
 
   return (
     <TwitchExtContext.Provider value={{ auth, config }}>
@@ -76,6 +92,7 @@ export const TwitchExtConsumer = TwitchExtContext.Consumer;
  * If you need the state in a class, use `SelfServiceConsumer` instead.
  * @see https://reactjs.org/docs/hooks-reference.html#usecontext
  */
-export const useAuth = () => useContextSelector(TwitchExtContext, v => v.auth);
-export const useConfig = () => useContextSelector(TwitchExtContext, v => v.config);
-
+export const useAuth = () =>
+  useContextSelector(TwitchExtContext, (v) => v.auth);
+export const useConfig = () =>
+  useContextSelector(TwitchExtContext, (v) => v.config);

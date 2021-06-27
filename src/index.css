@@ -1,17 +1,43 @@
-body {
+:root {
+  --color-ciano: #39f8ff;
+  --color-blue: #2572fe;
+  --color-gold: #ff9c00;
+  --color-red: #ff0d7b;
+  --color-lime: #47ee3e;
+  --color-dark-pink: rgb(255, 0, 179);
+  --color-pink: #fe90fe;
+  --color-yellow: #feca29;
+  --color-black: #312610;
+  --color-dark-grey: #333333;
+  --color-purple: #4b0f98;
+  --color-light-purple: #c115f8;
+}
+
+html,
+body,
+#root {
+  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-html, body, #root {
   height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  display: flex;
+  font-family: "Viga", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+a:visited {
+  color: unset;
 }

@@ -1,10 +1,9 @@
 import React from 'react'
+import Panel from './Panel'
 
 const VideoComponent = () => {
   return (
-    <div style={{width: 320, height: '100%', backgroundColor: 'white'}}>
-      Video component
-    </div>
+    <Panel />
   )
 }
 

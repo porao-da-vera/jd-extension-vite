@@ -1,10 +1,9 @@
 import React from 'react'
+import Panel from './Panel'
 
 const Mobile = () => {
   return (
-    <div>
-      Mobile
-    </div>
+    <Panel />
   )
 }
 
