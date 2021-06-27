@@ -4,7 +4,7 @@ import SongCard from "./SongCard";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 
-const ViewerSongList = ({
+const PanelSongList = ({
   songList,
   dispatch,
   listStatus,
@@ -59,4 +59,4 @@ const ViewerSongList = ({
   </AutoSizer>
 );
 
-export default ViewerSongList;
+export default PanelSongList;

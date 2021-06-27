@@ -117,7 +117,6 @@ function reducer(state, { type, payload }) {
         ...state,
         listConfig: payload.listStatus,
         requestedSongs: payload.requestedSongs,
-        requestedIds: payload.requestedIds,
       };
     case "setIsRequestView":
       if (!payload) {
@@ -143,7 +142,6 @@ function reducer(state, { type, payload }) {
       return {
         ...state,
         requestedSongs: [...state.requestedSongs, payload.change],
-        requestedIds: [...state.requestedIds, payload.change.song.id],
       };
     case SONG_ACTION_TYPE.CHANGE:
       return {

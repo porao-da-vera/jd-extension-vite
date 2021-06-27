@@ -7,7 +7,7 @@ import { getGameList } from "./api";
 import useDebounce from "./useDebounce";
 import ListHeader from "./ListHeader";
 import { initialState, reducer } from "./PanelReducer";
-import ViewerView from "./PanelView";
+import PanelViiew from "./PanelView";
 import Spinner from "./Spinner";
 import SharePermission from "./SharePermission";
 import RequestedSongList from "./RequestedSongList";
@@ -133,7 +133,7 @@ const Panel = () => {
             listStatus={state.listConfig.status}
           />
           <Main>
-            <ViewerView auth={auth} dispatch={dispatch} state={state} />
+            <PanelViiew auth={auth} dispatch={dispatch} state={state} />
           </Main>
         </>
       );

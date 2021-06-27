@@ -51,7 +51,7 @@
     },
     {
       "channelId": "96775663",
-      "configurationAnchor": "video_overlay",
+      "configurationAnchor": "panel",
       "displayChannelName": "metrodavania",
       "features": {
         "isBitsEnabled": false,
@@ -62,7 +62,29 @@
         "width": 1280,
         "height": 720
       },
-      "id": "3",
+      "id": "4",
+      "isPopout": false,
+      "label": "",
+      "linked": true,
+      "linkedUserId": "265737932",
+      "orientation": "Portrait",
+      "type": "component",
+      "viewerType": "Logged-In Viewer"
+    },
+    {
+      "channelId": "96775663",
+      "configurationAnchor": "panel",
+      "displayChannelName": "metrodavania",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "id": "5",
       "isPopout": false,
       "label": "",
       "linked": true,

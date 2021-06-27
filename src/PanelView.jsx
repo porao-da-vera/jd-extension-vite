@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import SelectedSong from "./SelectedSong";
-import ViewerSongList from "./PanelSongList";
+import PanelSongList from "./PanelSongList";
 import { addSongToList } from "./api";
 import ListWarning from "./ListWarning";
 import FilterSection from "./FilterSection";
-import { ViewerViewWrapper } from "./PanelView.styled";
+import { PanelViiewWrapper } from "./PanelView.styled";
 
 const handleAddSong = (song, dispatch, display_name) => {
   // song.difficulty >= 4 && (song = { ...song, difficulty: 4 });
@@ -30,7 +30,7 @@ const handleAddSong = (song, dispatch, display_name) => {
     });
 };
 
-const ViewerView = ({ state, dispatch, auth }) => {
+const PanelViiew = ({ state, dispatch, auth }) => {
   const {
     loading,
     selectedSong,
@@ -95,8 +95,8 @@ const ViewerView = ({ state, dispatch, auth }) => {
         }}
         dispatch={dispatch}
       />
-      <ViewerViewWrapper>
-        <ViewerSongList
+      <PanelViiewWrapper>
+        <PanelSongList
           listStatus={state.listConfig.status}
           dispatch={dispatch}
           isLoading={loading}
@@ -104,11 +104,11 @@ const ViewerView = ({ state, dispatch, auth }) => {
           extremeCost={state.extremeCost}
           bannedCost={bannedCost}
           bannedIds={bannedIds}
-          requestedIds={state.requestedIds}
+          requestedIds={state.requestedSongs.map(song => song.song.id)}
         />
-      </ViewerViewWrapper>
+      </PanelViiewWrapper>
     </>
   );
 };
 
-export default ViewerView;
+export default PanelViiew;
