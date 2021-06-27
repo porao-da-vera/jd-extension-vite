@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "scripts": {
-    "dev": "cross-env VITE_EBS_URL=https://backend-jd-list-95upj.ondigitalocean.app vite",
+    "dev": "cross-env VITE_EBS_URL=https://just-dance.club vite",
     "local": "cross-env VITE_EBS_URL=http://localhost:3000 vite",
     "build": "vite build",
     "serve": "vite preview"

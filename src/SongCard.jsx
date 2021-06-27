@@ -4,7 +4,7 @@ import { Card, Thumb, Source, Info, Difficulty } from "./SongCard.style";
 import SongControls from "./SongControls";
 import Spinner from "./Spinner";
 import SongCardOverlay from "./SongCardOverlay";
-import { DIFFICULTIES, MODES } from "./constants";
+import { DIFFICULTIES, MODES, BASE_URL } from "./constants";
 
 const SongCard = ({
   id,
@@ -49,7 +49,11 @@ const SongCard = ({
     >
       {showOverlay && <SongCardOverlay overlay={overlay} />}
       <Thumb danced={danced}>
-        <img loading="lazy" src={thumb} alt={name + " - " + artist} />
+        <img
+          loading="lazy"
+          src={`${BASE_URL}/images/${thumb}`}
+          alt={name + " - " + artist}
+        />
         <Source>{source}</Source>
       </Thumb>
       <Info danced={danced}>
@@ -83,5 +87,4 @@ const SongCard = ({
     </Card>
   );
 };
-
 export default SongCard;
