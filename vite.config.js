@@ -1,4 +1,3 @@
-import { defineConfig, loadEnv } from "vite";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 const { resolve } = require("path");
 

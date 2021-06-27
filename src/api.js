@@ -1,5 +1,4 @@
 import {
-  API,
   API_BASE_URL,
   LOCAL_STORAGE_TOKEN_KEY,
   LOCAL_STORAGE_TWITCH_USER,
@@ -12,7 +11,7 @@ const routes = {
   reward: API_BASE_URL + "/reward",
   tracklist: API_BASE_URL + "/tracklist",
   initViewer: API_BASE_URL + "/viewer",
-  initBroadcaster: API_BASE_URL + "/initBroadcaster",
+  initConfig: API_BASE_URL + "/initConfig",
 };
 
 const options = () => {
@@ -69,9 +68,9 @@ export const getInitialViewer = () => {
     );
   });
 };
-export const initBroadcaster = () => {
+export const initConfig = () => {
   return new Promise((resolve, reject) => {
-    fetch(routes.initBroadcaster, options()).then((response) =>
+    fetch(routes.initConfig, options()).then((response) =>
       response
         .json()
         .then((data) => {

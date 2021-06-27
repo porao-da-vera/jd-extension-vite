@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import { COLORS } from "./constants";
 
 export const ConfigWrapper = styled.div`
   display: flex;
@@ -74,4 +75,7 @@ export const GeneralConfig = styled.div`
   justify-content: flex-start;
   width: calc(100% / 3);
   padding-right: 8px;
+  & a{
+    color: ${COLORS.LIGHT_PURPLE};
+  }
 `;

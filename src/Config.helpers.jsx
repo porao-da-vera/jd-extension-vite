@@ -6,7 +6,7 @@ import {
   getAllRewards,
   updateRewardsCost,
   validateAndRefresh,
-  initBroadcaster,
+  initConfig,
 } from "./api";
 import { setTwitchConfig } from "./TwitchApi";
 
@@ -44,8 +44,13 @@ const twitchLogin = () => {
   window.open(BASE_URL + "/auth/twitch");
 };
 
+// Page custom hook
 export const useConfigPage = ({ auth, config, state, dispatch }) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const getConfigFromState = () => {
+    return state.config;
+  }
 
   const handleClose = () => {
     dispatch({ type: "setAlert", payload: "" });
@@ -62,50 +67,62 @@ export const useConfigPage = ({ auth, config, state, dispatch }) => {
 
   useEffect(() => {
     // TODO: change name and scope to initConfig
-    initBroadcaster();
     if (config) {
       dispatch({ type: "setConfig", payload: config });
-    } else {
-      resetConfig();
-    }
+    } 
+    // else {
+    //   initConfig();
+    //   resetConfig();
+    // }
   }, [config, auth]);
 
   useEffect(() => {
-    getGameList()
-      .then((data) => {
-        let songs = [];
-        Object.keys(data).map((key) => {
-          songs = songs.concat(data[key]);
-          return false;
+    // TODO: change name and scope to initConfig
+    if (auth, state.songList.length === 0) {
+      getGameList()
+        .then((data) => {
+          let songs = [];
+          Object.keys(data).map((key) => {
+            songs = songs.concat(data[key]);
+            return false;
+          });
+          dispatch({ type: "setSongList", payload: songs });
+        })
+        .catch((err) => {
+          console.error(err);
         });
-        dispatch({ type: "setSongList", payload: songs });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [config, auth]);
+    }
+  }, [auth]);
+
+  const saveAndBroadcastConfig = (newConfig) => {
+    setTwitchConfig(newConfig, () =>
+      dispatch({ type: "setAlert", payload: "success" })
+    );
+    window.Twitch.ext.send("broadcast", "application/json", {
+      type: "configChange",
+      data: newConfig,
+    });
+  };
 
   const SaveChangedData = () => {
     const newConfig = {
       ...state.config,
       bannedIds: Object.keys(state.bannedSongs),
     };
-
-    updateRewardsCost({
-      bannedCost: newConfig.bannedCost,
-      extremeCost: newConfig.extremeCost,
-    })
-      .then((raw) => raw.json())
-      .then((result) => {
-        setTwitchConfig(newConfig, () =>
-          dispatch({ type: "setAlert", payload: "success" })
-        );
-        window.Twitch.ext.send("broadcast", "application/json", {
-          type: "configChange",
-          data: newConfig,
-        });
+    console.info(newConfig);
+    if (newConfig.broadcasterType) {
+      updateRewardsCost({
+        bannedCost: newConfig.bannedCost,
+        extremeCost: newConfig.extremeCost,
       })
-      .catch((err) => console.error(err));
+        .then((raw) => raw.json())
+        .then((result) => {
+          saveAndBroadcastConfig(newConfig);
+        })
+        .catch((err) => console.error(err));
+    } else {
+      saveAndBroadcastConfig(newConfig);
+    }
   };
 
   const updateConfig = (data) => {
@@ -118,7 +135,7 @@ export const useConfigPage = ({ auth, config, state, dispatch }) => {
       if (type === "login") {
         saveToken(data.token, data.refreshToken);
         const newConfig = {
-          ...state.config,
+          ...getConfigFromState(),
           broadcasterType: data.broadcaster_type,
         };
         setTwitchConfig(newConfig, () => {
@@ -163,5 +180,6 @@ export const useConfigPage = ({ auth, config, state, dispatch }) => {
     updateConfig,
     twitchLogin,
     checkRewards,
+    setIsLoading
   };
 };
