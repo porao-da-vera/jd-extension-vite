@@ -1,19 +1,17 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from "@material-ui/core/Snackbar";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
 import Switch from "@material-ui/core/Switch";
 import ListWarning from "./ListWarning";
 import { BASE_URL } from "./constants";
 
 import { useAuth, useConfig } from "./TwitchExt";
-import { initialState, reducer } from "./configReducer";
 import {
-  CostConfigWrapper,
   ButtonStyled,
   ConfigForm,
   ConfigActions,
@@ -21,7 +19,6 @@ import {
   GeneralConfig,
 } from "./Config.styled";
 import { Alert, useConfigPage, getAlertMsg } from "./Config.helpers";
-import CostsConfig from "./CostsConfig";
 import BannedControl from "./BannedControl";
 import Spinner from "./Spinner";
 import Rewards from "./Rewards";
@@ -39,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
 const Config = () => {
   const auth = useAuth();
   const config = useConfig();
-  const [state, dispatch] = useReducer(reducer, initialState);
   const {
     setIsLoading,
     isLoading,
@@ -49,17 +45,15 @@ const Config = () => {
     updateConfig,
     twitchLogin,
     checkRewards,
+    state,
+    dispatch,
   } = useConfigPage({
     auth,
     config,
-    state,
-    dispatch,
   });
   const classes = useStyles();
 
   const RewardsView = () => {
-    console.log(state.config);
-
     if (state.config.broadcasterType === null) {
       return (
         <ListWarning buttonLabel="Login" onClick={twitchLogin}>
@@ -79,7 +73,7 @@ const Config = () => {
             <li>
               You are not a Twitch <em>"Affiliate"</em> yet. If you wanna update
               your status, please{" "}
-              <a href={BASE_URL + "/auth/twitch"}> clique here</a>
+              <a href={BASE_URL + "/auth/twitch"}> click here</a>
             </li>
             <li>the extension will not show tickets or song cost.</li>
             <li>All songs will be cost free.</li>
@@ -112,44 +106,15 @@ const Config = () => {
               </ul>
             </div>
           ) : (
-            <FormControl
-              component="fieldset"
-              style={{ paddingTop: 8, marginTop: 8 }}
-            >
-              <FormLabel component="legend">Cost</FormLabel>
-
-              <CostConfigWrapper>
-                <CostsConfig
-                  cost={state.config.extremeCost}
-                  setCost={(e) =>
-                    dispatch({
-                      type: "setExtremeCost",
-                      payload: e.target.value,
-                    })
-                  }
-                >
-                  Extreme
-                </CostsConfig>
-                <CostsConfig
-                  cost={state.config.bannedCost}
-                  setCost={(e) =>
-                    dispatch({
-                      type: "setBannedCost",
-                      payload: e.target.value,
-                    })
-                  }
-                >
-                  Banned
-                </CostsConfig>
-              </CostConfigWrapper>
-              <Rewards
-                rewardsStatus={state.rewardsStatus}
-                isLoading={isLoading}
-                dispatch={dispatch}
-                checkRewards={checkRewards}
-                setIsLoading={setIsLoading}
-              />
-            </FormControl>
+            <Rewards
+              rewardsStatus={state.rewardsStatus}
+              isLoading={isLoading}
+              dispatch={dispatch}
+              checkRewards={checkRewards}
+              setIsLoading={setIsLoading}
+              extremeCost={state.config.extremeCost}
+              bannedCost={state.config.bannedCost}
+            />
           )}
         </>
       );

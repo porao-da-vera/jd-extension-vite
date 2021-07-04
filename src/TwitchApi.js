@@ -1,4 +1,3 @@
-import { BASE_URL, LOCAL_STORAGE_TWITCH_USER } from "./constants";
 export const twitch = window.Twitch.ext;
 
 export const getTwitchConfig = (callback, init = true) => {
@@ -24,6 +23,7 @@ export const getTwitchConfig = (callback, init = true) => {
 };
 
 export const setTwitchConfig = (data, callBack) => {
+  console.info(data)
   twitch.configuration.set("broadcaster", "0.0.1", JSON.stringify(data));
   typeof callBack === "function" && callBack();
 };

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import MuiAlert from "@material-ui/lab/Alert";
 import { BASE_URL, LOCAL_STORAGE_TWITCH_USER } from "./constants";
 import {
   getGameList,
-  getAllRewards,
   updateRewardsCost,
-  validateAndRefresh,
-  initConfig,
 } from "./api";
 import { setTwitchConfig } from "./TwitchApi";
+import { initialState, reducer } from "./configReducer";
+import { rigLog } from "./TwitchExt";
 
 export const defaultConfig = {
   extremeCost: 5,
@@ -40,20 +39,36 @@ export const getAlertMsg = (type) => {
     : "Erro ao salvar dados";
 };
 
-const twitchLogin = () => {
-  window.open(BASE_URL + "/auth/twitch");
-};
 
 // Page custom hook
-export const useConfigPage = ({ auth, config, state, dispatch }) => {
+export const useConfigPage = ({ auth, config }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isLoading, setIsLoading] = useState(false);
-
-  const getConfigFromState = () => {
-    return state.config;
-  }
-
+  
   const handleClose = () => {
     dispatch({ type: "setAlert", payload: "" });
+  };
+  const handleListenToLogin = (target, contentType, message) => {
+    const { type, data } = JSON.parse(message);
+    if (type === "login") {
+      saveToken(data.token, data.refreshToken);
+      const newConfig = {
+        ...state.config,
+        broadcasterType: data.broadcaster_type,
+      };
+      setTwitchConfig(newConfig, () => {
+        dispatch({
+          type: "setBroadcasterType",
+          payload: data.broadcaster_type,
+        });
+        window.Twitch.ext.unlisten("broadcast", handleListenToLogin)
+      });
+    }
+  }
+  
+  const twitchLogin = () => {
+    window.Twitch.ext.listen("broadcast", handleListenToLogin);
+    window.open(BASE_URL + "/auth/twitch");
   };
 
   const resetConfig = () => {
@@ -66,18 +81,19 @@ export const useConfigPage = ({ auth, config, state, dispatch }) => {
   };
 
   useEffect(() => {
-    // TODO: change name and scope to initConfig
+    console.log(config)
     if (config) {
       dispatch({ type: "setConfig", payload: config });
     } 
-    // else {
-    //   initConfig();
-    //   resetConfig();
-    // }
-  }, [config, auth]);
+  }, [config]);
 
   useEffect(() => {
-    // TODO: change name and scope to initConfig
+    if (state.config) {
+
+    }
+  }, [state.config]);
+
+  useEffect(() => {
     if (auth, state.songList.length === 0) {
       getGameList()
         .then((data) => {
@@ -129,48 +145,6 @@ export const useConfigPage = ({ auth, config, state, dispatch }) => {
     dispatch({ type: "setConfig", payload: { ...state.config, ...data } });
   };
 
-  useEffect(() => {
-    window.Twitch.ext.listen("broadcast", (target, contentType, message) => {
-      const { type, data } = JSON.parse(message);
-      if (type === "login") {
-        saveToken(data.token, data.refreshToken);
-        const newConfig = {
-          ...getConfigFromState(),
-          broadcasterType: data.broadcaster_type,
-        };
-        setTwitchConfig(newConfig, () => {
-          dispatch({
-            type: "setBroadcasterType",
-            payload: data.broadcaster_type,
-          });
-        });
-      }
-    });
-  }, []);
-
-  const checkRewards = () => {
-    setIsLoading(true);
-    validateAndRefresh()
-      .then((result) => {
-        if (result?.status !== "OK") {
-          saveToken(result.access_token, result.refresh_token);
-        }
-        getAllRewards()
-          .then((blob) => blob.json())
-          .then((result) => {
-            dispatch({ type: "setRewardsStatus", payload: result });
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.error(error);
-            setIsLoading(false);
-          });
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error("error validate and refresh: ", err);
-      });
-  };
 
   return {
     isLoading,
@@ -179,7 +153,8 @@ export const useConfigPage = ({ auth, config, state, dispatch }) => {
     SaveChangedData,
     updateConfig,
     twitchLogin,
-    checkRewards,
-    setIsLoading
+    setIsLoading,
+    state,
+    dispatch
   };
 };

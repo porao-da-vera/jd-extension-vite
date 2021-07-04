@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import { createContext, useContextSelector } from "use-context-selector";
 import { LOCAL_STORAGE_TOKEN_KEY } from "./constants";
+import { defaultConfig } from "./Config.helpers";
+import { setTwitchConfig } from "./TwitchApi";
+import { initConfig } from "./api";
 
 export const TwitchExtContext = createContext();
 
@@ -41,33 +44,43 @@ export const TwitchExtProvider = ({ children }) => {
       setAuth(newAuth);
       window.localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, auth.token);
     });
-    // init config
-    const configJson = twitch.configuration.broadcaster?.content;
+  }, []);
+  useEffect(() => {
+    if (auth) {
+      // init config
+      const configJson = twitch.configuration.broadcaster?.content;
 
-    rigLog(config);
-    if (configJson) {
-      try {
-        setConfig(JSON.parse(configJson));
-      } catch (error) {
-        throw new Error(error);
-      }
-    } else {
-      try {
-        twitch.configuration.onChanged(() => {
+      console.info(configJson, auth);
+      if (configJson) {
+        try {
+          setConfig(JSON.parse(configJson));
+        } catch (error) {
+          throw new Error(error);
+        }
+      } else {
+        try {
           const broadcaster = twitch.configuration.broadcaster;
+          console.info(broadcaster?.content);
           if (broadcaster?.content) {
             try {
               const config = JSON.parse(broadcaster.content);
-
-              rigLog(config);
               setConfig(config);
             } catch (e) {
               console.log(e);
             }
+          } else {
+            // looks like twitch ext doesn't like to check and set right after it
+            setTimeout(() => {
+              console.info("setConfig");
+              setTwitchConfig(defaultConfig, () => {
+                initConfig();
+                setConfig(defaultConfig);
+              });
+            }, 50);
           }
-        });
-      } catch (error) {
-        throw new Error(error);
+        } catch (error) {
+          throw new Error(error);
+        }
       }
     }
     window.Twitch.ext.listen("broadcast", (target, contentType, msg) =>
@@ -76,7 +89,7 @@ export const TwitchExtProvider = ({ children }) => {
     return () => {
       window.Twitch.ext.unlisten("broadcast", updateConfigFromListener);
     };
-  }, []);
+  }, [auth]);
 
   return (
     <TwitchExtContext.Provider value={{ auth, config }}>

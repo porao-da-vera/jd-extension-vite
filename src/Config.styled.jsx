@@ -30,14 +30,6 @@ export const Content = styled(Box)`
 `;
 
 export const SongsToBanWrapper = styled.div``;
-
-export const CostConfigWrapper = styled.div`
-  display: flex;
-  & > * {
-    flex-basis: 50%;
-    width: 50%;
-  }
-`;
 export const ConfigForm = styled.div`
   flex-grow: 1;
   overflow: auto;
