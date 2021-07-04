@@ -3,8 +3,8 @@
   "scripts": {
     "dev": "cross-env VITE_EBS_URL=https://just-dance.club vite",
     "local": "cross-env VITE_EBS_URL=http://localhost:3000 vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "build": "cross-env VITE_EBS_URL=https://just-dance.club vite build",
+    "serve": "cross-env VITE_EBS_URL=https://just-dance.club vite preview"
   },
   "dependencies": {
     "react": "^17.0.0",
