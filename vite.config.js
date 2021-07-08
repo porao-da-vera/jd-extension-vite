@@ -23,7 +23,7 @@ export default ({ command, mode }) => {
     return {
       // build specific config
       build: {
-        assetsDir: "./",
+        assetsDir: ".",
         rollupOptions: {
           input: {
             panel: resolve(__dirname, "panel.html"),
