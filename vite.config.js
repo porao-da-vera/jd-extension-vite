@@ -21,6 +21,7 @@ export default ({ command, mode }) => {
     };
   } else {
     return {
+      base: '',
       // build specific config
       build: {
         assetsDir: ".",
@@ -30,8 +31,8 @@ export default ({ command, mode }) => {
             broadcaster: resolve(__dirname, "broadcaster.html"),
             mobile: resolve(__dirname, "mobile.html"),
             video_component: resolve(__dirname, "video_component.html"),
-            video_overlay: resolve(__dirname, "video_overlay.html"),
             config: resolve(__dirname, "config.html"),
+            video_overlay: resolve(__dirname, "video_overlay.html"),
           },
         },
       },

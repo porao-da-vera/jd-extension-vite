@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_TOKEN_KEY } from "./constants";
 import { defaultConfig } from "./Config.helpers";
 import { setTwitchConfig } from "./TwitchApi";
 import { initConfig } from "./api";
+import { asyncLocalStorage } from './utils';
 
 export const TwitchExtContext = createContext();
 
@@ -41,8 +42,9 @@ export const TwitchExtProvider = ({ children }) => {
         channelId: channel_id,
         userId: user_id,
       };
-      setAuth(newAuth);
-      window.localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, auth.token);
+      asyncLocalStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, auth.token).then(() => {
+        setAuth(newAuth);
+      });
     });
   }, []);
   useEffect(() => {
