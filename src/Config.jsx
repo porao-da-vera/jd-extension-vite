@@ -22,6 +22,7 @@ import { Alert, useConfigPage, getAlertMsg } from "./Config.helpers";
 import BannedControl from "./BannedControl";
 import Spinner from "./Spinner";
 import Rewards from "./Rewards";
+import RewardsConfig from './RewardsConfig'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,15 +107,17 @@ const Config = () => {
               </ul>
             </div>
           ) : (
-            <Rewards
-              rewardsStatus={state.rewardsStatus}
-              isLoading={isLoading}
-              dispatch={dispatch}
-              checkRewards={checkRewards}
-              setIsLoading={setIsLoading}
-              extremeCost={state.config.extremeCost}
-              bannedCost={state.config.bannedCost}
-            />
+
+            <RewardsConfig/>
+            // <Rewards
+            //   rewardsStatus={state.rewardsStatus}
+            //   isLoading={isLoading}
+            //   dispatch={dispatch}
+            //   checkRewards={checkRewards}
+            //   setIsLoading={setIsLoading}
+            //   extremeCost={state.config.extremeCost}
+            //   bannedCost={state.config.bannedCost}
+            // />
           )}
         </>
       );
