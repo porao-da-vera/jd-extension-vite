@@ -27,16 +27,20 @@ const options = () => {
 
 export const getGameList = () => {
   return new Promise((resolve, reject) => {
-    fetch(routes.tracklist, options()).then((response) =>
-      response
-        .json()
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        })
-    );
+    fetch(routes.tracklist, options())
+      .then((response) => {
+        if(response.ok) {
+          return response.json();
+        } else {
+          data.json().then(err => reject(JSON.stringify(data)));
+        }
+      })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 };
 
@@ -189,3 +193,24 @@ export const fixRewards = (rewards) => {
     body: JSON.stringify({ rewards, token }),
   });
 };
+
+export const updateReward = ({data, reward}) => {
+  const token = window.localStorage.getItem(
+    LOCAL_STORAGE_TWITCH_USER.AUTHORIZATION
+  );
+  return fetch(routes.reward, {
+    method: "PATCH",
+    headers: options().headers,
+    body: JSON.stringify({data, reward, token}),
+  });
+}
+
+export const updateRewardRange = ({ regularRange, extremeRange, bannedRange, subRange, raidRange }) => {
+  return fetch(routes.reward, {
+    method: "PUT",
+    headers: options().headers,
+    body: JSON.stringify({regularRange, extremeRange, bannedRange, subRange, raidRange }),
+  });
+}
+
+

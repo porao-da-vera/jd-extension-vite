@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useReducer } from "react";
 import MuiAlert from "@material-ui/lab/Alert";
-import { BASE_URL, LOCAL_STORAGE_TWITCH_USER } from "./constants";
-import {
-  getGameList,
-  updateRewardsCost,
-} from "./api";
+import { BASE_URL, LOCAL_STORAGE_TWITCH_USER, REWARDS } from "./constants";
+import { getGameList, updateRewardRange } from "./api";
 import { setTwitchConfig } from "./TwitchApi";
 import { initialState, reducer } from "./configReducer";
 import { rigLog } from "./TwitchExt";
@@ -19,6 +16,8 @@ export const defaultConfig = {
   SongsPerViewer: 0,
   SongsPerStream: 0,
   broadcasterType: null,
+  useExtreme: false,
+  useBanned: false,
 };
 
 export const saveToken = (token, refreshToken) => {
@@ -39,12 +38,11 @@ export const getAlertMsg = (type) => {
     : "Erro ao salvar dados";
 };
 
-
 // Page custom hook
 export const useConfigPage = ({ auth, config }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const handleClose = () => {
     dispatch({ type: "setAlert", payload: "" });
   };
@@ -61,11 +59,11 @@ export const useConfigPage = ({ auth, config }) => {
           type: "setBroadcasterType",
           payload: data.broadcaster_type,
         });
-        window.Twitch.ext.unlisten("broadcast", handleListenToLogin)
+        window.Twitch.ext.unlisten("broadcast", handleListenToLogin);
       });
     }
-  }
-  
+  };
+
   const twitchLogin = () => {
     window.Twitch.ext.listen("broadcast", handleListenToLogin);
     window.open(BASE_URL + "/auth/twitch");
@@ -81,20 +79,19 @@ export const useConfigPage = ({ auth, config }) => {
   };
 
   useEffect(() => {
-    console.log(config)
     if (config) {
       dispatch({ type: "setConfig", payload: config });
-    } 
+    }
   }, [config]);
 
-  useEffect(() => {
-    if (state.config) {
+  // useEffect(() => {
+  //   if (state.config) {
 
-    }
-  }, [state.config]);
+  //   }
+  // }, [state.config]);
 
   useEffect(() => {
-    if (auth, state.songList.length === 0) {
+    if ((auth, state.songList.length === 0)) {
       getGameList()
         .then((data) => {
           let songs = [];
@@ -120,16 +117,19 @@ export const useConfigPage = ({ auth, config }) => {
     });
   };
 
-  const SaveChangedData = () => {
+  const SaveChangedData = (costs) => {
     const newConfig = {
       ...state.config,
       bannedIds: Object.keys(state.bannedSongs),
     };
-    console.info(newConfig);
+    console.info(costs);
     if (newConfig.broadcasterType) {
-      updateRewardsCost({
-        bannedCost: newConfig.bannedCost,
-        extremeCost: newConfig.extremeCost,
+      updateRewardRange({
+        regularRange: costs[REWARDS.REGULAR],
+        extremeRange: costs[REWARDS.EXTREME],
+        bannedRange: costs[REWARDS.BANNED],
+        subRange: costs[REWARDS.SUB],
+        raidRange: costs[REWARDS.RAID],
       })
         .then((raw) => raw.json())
         .then((result) => {
@@ -145,7 +145,6 @@ export const useConfigPage = ({ auth, config }) => {
     dispatch({ type: "setConfig", payload: { ...state.config, ...data } });
   };
 
-
   return {
     isLoading,
     handleClose,
@@ -155,6 +154,6 @@ export const useConfigPage = ({ auth, config }) => {
     twitchLogin,
     setIsLoading,
     state,
-    dispatch
+    dispatch,
   };
 };

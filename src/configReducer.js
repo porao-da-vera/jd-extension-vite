@@ -1,3 +1,4 @@
+import { REWARDS } from "./constants";
 const initialState = {
   error: false,
   config: null,
@@ -6,8 +7,13 @@ const initialState = {
   songList: [],
   hasAllRewards: null,
   rewardsStatus: null,
-  useExtreme: true,
-  useBanned: false,
+  costs: {
+    [REWARDS.REGULAR]: [0, 2],
+    [REWARDS.EXTREME]: [3],
+    [REWARDS.BANNED]: [4],
+    [REWARDS.SUB]: [0, 4],
+    [REWARDS.RAID]: [0, 3],
+  },
 };
 
 function reducer(state, { type, payload }) {
@@ -17,15 +23,25 @@ function reducer(state, { type, payload }) {
         ...state,
         rewardsStatus: payload,
       };
-      case "setUseExtreme":
+    case "setUseExtreme":
       return {
         ...state,
-        useExtreme: payload,
+        config: {
+          ...state.config,
+          useExtreme: payload,
+        },
+        costs: {
+          ...state.costs,
+          [REWARDS.REGULAR]: payload ? [0, 2] : [0, 3]
+        },
       };
-      case "setUseBanned":
+    case "setUseBanned":
       return {
         ...state,
-        useBanned: payload,
+        config: {
+          ...state.config,
+          useBanned: payload,
+        },
       };
     case "setAuth":
       return {
@@ -91,16 +107,10 @@ function reducer(state, { type, payload }) {
         error: payload,
       };
 
-    case "setExtremeCost":
+    case "setCosts":
       return {
         ...state,
-        config: { ...state.config, extremeCost: payload },
-      };
-
-    case "setBannedCost":
-      return {
-        ...state,
-        config: { ...state.config, bannedCost: payload },
+        costs: payload,
       };
 
     case "setBannedSongs":
