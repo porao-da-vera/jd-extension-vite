@@ -43,3 +43,11 @@ export const LOCAL_STORAGE_TWITCH_USER = {
 export const DIFFICULTIES = [null, "Easy", "Medium", "Hard", "Extreme", "Banned"];
 
 export const MODES = [null, "Solo", "Duet", "Trio", "Dance Crew"];
+
+export const REWARDS = {
+  REGULAR: "regular",
+  BANNED: "banned",
+  EXTREME: "extreme",
+  RAID: "raid",
+  SUB: "sub",
+};

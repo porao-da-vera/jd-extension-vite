@@ -1,10 +1,11 @@
 import React from "react";
 import TicketIcon from "./TicketIcon";
-import { Card, Thumb, Source, Info, Difficulty } from "./SongCard.style";
+import { Card, Thumb, Source, Info } from "./SongCard.style";
 import SongControls from "./SongControls";
 import Spinner from "./Spinner";
 import SongCardOverlay from "./SongCardOverlay";
 import { DIFFICULTIES, MODES, BASE_URL } from "./constants";
+import Tag, { states, types } from './Tag';
 
 const SongCard = ({
   id,
@@ -64,15 +65,15 @@ const SongCard = ({
         </p>
         <div>
           {!!Number(cost) && (
-            <Difficulty>
+            <Tag>
               {cost}&nbsp;
               <TicketIcon />
-            </Difficulty>
+            </Tag>
           )}
-          <Difficulty banned={difficulty === 5}>
+          <Tag type={difficulty === 5 ? types.banned : types.regular}>
             {DIFFICULTIES[difficulty]}
-          </Difficulty>
-          <Difficulty>{MODES[coaches]}</Difficulty>
+          </Tag>
+          <Tag>{MODES[coaches]}</Tag>
         </div>
       </Info>
 

@@ -108,7 +108,7 @@ const Config = () => {
             </div>
           ) : (
 
-            <RewardsConfig/>
+            <RewardsConfig useExtreme={state.useExtreme} useBanned={state.useBanned} dispatch={dispatch} />
             // <Rewards
             //   rewardsStatus={state.rewardsStatus}
             //   isLoading={isLoading}

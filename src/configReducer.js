@@ -6,6 +6,8 @@ const initialState = {
   songList: [],
   hasAllRewards: null,
   rewardsStatus: null,
+  useExtreme: true,
+  useBanned: false,
 };
 
 function reducer(state, { type, payload }) {
@@ -14,6 +16,16 @@ function reducer(state, { type, payload }) {
       return {
         ...state,
         rewardsStatus: payload,
+      };
+      case "setUseExtreme":
+      return {
+        ...state,
+        useExtreme: payload,
+      };
+      case "setUseBanned":
+      return {
+        ...state,
+        useBanned: payload,
       };
     case "setAuth":
       return {
@@ -32,7 +44,7 @@ function reducer(state, { type, payload }) {
         userInfo: payload,
       };
     case "setBroadcasterType":
-      console.log(payload)
+      console.log(payload);
       return {
         ...state,
         config: { ...state.config, broadcasterType: payload },

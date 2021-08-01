@@ -4,22 +4,29 @@ import { getAllRewards } from "./api";
 import Spinner from "./Spinner";
 import RewardBox from "./RewardBox";
 import Button from "@material-ui/core/Button";
-const RewardsConfig = () => {
+import { REWARDS } from './constants';
+const RewardsConfig = ({useBanned, useExtreme, dispatch}) => {
   const [rewards, setRewards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     getAllRewards()
-      .then((rawResponse) => rawResponse.json())
-      .then((response) => {
-        console.log(response);
-        setRewards(response);
-        setIsLoading(false);
+      .then((rawResponse) => {
+        if(rawResponse.ok){
+          rawResponse.json().then((response) => {        
+            setRewards(response);
+            setIsLoading(false);
+          });
+        } else {
+          rawResponse.json().then(err => {
+            console.error(err);
+            setIsLoading(false);
+          })
+        }
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
       });
   }, []);
 
@@ -33,12 +40,16 @@ const RewardsConfig = () => {
     <RewardForm onSubmit={handleSubmit}>
       <Wrapper>
         {rewards.map((reward) => {
+          const { data, range, type, id } = reward;
+          const disabled = (type === REWARDS.BANNED && useBanned) || (type === REWARDS.EXTREME && useExtreme);
           return (
             <RewardBox
-              reward={reward.data}
-              range={reward.range}
-              type={reward.type}
-              key={reward.id}
+              reward={data}
+              range={range}
+              type={type}
+              key={id}
+              disabled={disabled}
+              dispatch={dispatch}
             />
           );
         })}
