@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Reward,
   LeftSection,
@@ -19,9 +19,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Chip from "@material-ui/core/Chip";
 import { DIFFICULTIES } from "./constants";
 import Tag, { states, types } from "./Tag";
-import { EditIcon, CheckIcon } from "./icons";
+import { EditIcon, CheckIcon, FixIcon } from "./icons";
 import { updateReward } from "./api";
-import { REWARDS } from "./constants"
+import { REWARDS } from "./constants";
 
 const difficulties = DIFFICULTIES.slice(1);
 
@@ -42,52 +42,83 @@ const DifficultySelector = ({ selected, onSelect }) => {
 };
 
 const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
-  const [title, setTitle] = useState(reward.title);
-  const [cost, setCost] = useState(reward.cost);
+  const [title, setTitle] = useState(reward?.title);
+  const [cost, setCost] = useState(reward?.cost);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleUpdateReward = () => {
-    updateReward({ data: { title, cost }, reward: reward.id })
-      .then((response) => {
-        setError(null);
-        setLoading(false);
-        setEditing(false)
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError(err);
-      });
+    if (reward.title === title && reward.cost === cost) {
+      setEditing(false);
+    } else {
+      updateReward({ data: { title, cost }, reward: reward.id })
+        .then((response) => {
+          setError(null);
+          setLoading(false);
+          setEditing(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(err);
+        });
+    }
   };
 
   const handleChange = (type, disabled) => {
-    if(type === REWARDS.EXTREME){
-      dispatch({type: "setUseExtreme", payload: !disabled})
+    if (type === REWARDS.EXTREME) {
+      dispatch({ type: "setUseExtreme", payload: !disabled });
     }
-    if(type === REWARDS.BANNED){
-      dispatch({type: "setUseBanned", payload: !disabled})
+    if (type === REWARDS.BANNED) {
+      dispatch({ type: "setUseBanned", payload: !disabled });
     }
   };
 
+  const getButtonConfig = () => {
+    if (title === undefined) {
+      return {
+        onClick: handleUpdateReward,
+        icon: <CheckIcon size={16} />,
+      };
+    }
+    if (editing) {
+      return {
+        onClick: handleUpdateReward,
+        icon: <CheckIcon size={16} />,
+      };
+    }
+    return {
+      onClick: () => setEditing(true),
+      icon: <EditIcon size={16} />,
+    };
+  };
+
+  const buttonConfig = getButtonConfig();
+
+  useEffect(() => {
+    console.info(title);
+  }, [title]);
+
   return (
     <StyledPaper elevation={3}>
-      <LeftSection>
-        {type !== "regular" && (
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={disabled}
-                onChange={() => handleChange(type, disabled)}
-                name="checkedA"
-              />
-            }
-          />
-        )}
-      </LeftSection>
+      {title !== undefined && (
+        <LeftSection>
+          {type !== "regular" && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={disabled}
+                  onChange={() => handleChange(type, disabled)}
+                  name="checkedA"
+                />
+              }
+            />
+          )}
+        </LeftSection>
+      )}
 
       <RightSection>
-        {type !== "regular" && `Use ${type} ?`}
+        {title !== undefined && type !== "regular" && `Use ${type} ?`}
         <TwitchReward>
           <TwitchRewardInfo>
             <Title>
@@ -97,7 +128,7 @@ const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
                   onChange={(e) => setTitle(e.target.value)}
                 />
               ) : (
-                <RewardName> {title}</RewardName>
+                <RewardName> {title ?? `${type} removed`}</RewardName>
               )}
             </Title>
             <Cost>
@@ -111,31 +142,21 @@ const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
               )}
             </Cost>
           </TwitchRewardInfo>
-          {editing ? (
-            <TwitchRewardEditBtn
-              color="primary"
-              aria-label="edit rewards"
-              component="div"
-              size="small"
-              onClick={handleUpdateReward}
-            >
-              <CheckIcon size={16} />
-            </TwitchRewardEditBtn>
-          ) : (
-            <TwitchRewardEditBtn
-              color="primary"
-              aria-label="edit rewards"
-              component="div"
-              size="small"
-              onClick={() => setEditing(true)}
-            >
-              <EditIcon size={16} />
-            </TwitchRewardEditBtn>
-          )}
+          <TwitchRewardEditBtn
+            color="primary"
+            aria-label="edit rewards"
+            component="div"
+            size="small"
+            onClick={buttonConfig.onClick}
+          >
+            {buttonConfig.icon}
+          </TwitchRewardEditBtn>
         </TwitchReward>
-        <Range>
-          <DifficultySelector selected={range} />
-        </Range>
+        {title !== undefined && (
+          <Range>
+            <DifficultySelector selected={range} />
+          </Range>
+        )}
       </RightSection>
     </StyledPaper>
   );

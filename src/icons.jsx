@@ -141,12 +141,20 @@ export const EditIcon = ({ size }) => {
 
 export const CheckIcon = ({ size }) => {
   return (
-    <svg      
+    <svg width={size} height={size} viewBox="0 0 24 24">
+      <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+    </svg>
+  );
+};
+export const FixIcon = ({ size }) => {
+  return (
+    <svg
+      
       width={size}
       height={size}
       viewBox="0 0 24 24"
     >
-      <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+      <path d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z" />
     </svg>
   );
 };

@@ -6,7 +6,7 @@ import RewardBox from "./RewardBox";
 import Button from "@material-ui/core/Button";
 import { REWARDS } from "./constants";
 
-const RewardsConfig = ({ useBanned, useExtreme, dispatch }) => {
+const RewardsConfig = ({ useBanned, useExtreme, dispatch, costs }) => {
   const [rewards, setRewards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,6 +19,7 @@ const RewardsConfig = ({ useBanned, useExtreme, dispatch }) => {
           if (rawResponse.ok) {
             rawResponse.json().then((response) => {
               setRewards(response);
+              console.log("rewards", response)
               dispatch({type: 'setCosts', payload: response.reduce((obj, reward) => {
                 obj[reward.type] = reward.range;
                 return obj;
@@ -50,7 +51,7 @@ const RewardsConfig = ({ useBanned, useExtreme, dispatch }) => {
         return (
           <RewardBox
             reward={data}
-            range={range}
+            range={costs[type]}
             type={type}
             key={id}
             disabled={disabled}

@@ -32,7 +32,7 @@ export const getGameList = () => {
         if(response.ok) {
           return response.json();
         } else {
-          data.json().then(err => reject(JSON.stringify(data)));
+          response.json().then(err => reject(JSON.stringify(err)));
         }
       })
       .then((data) => {

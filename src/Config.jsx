@@ -93,6 +93,7 @@ const RewardsView = ({ state, twitchLogin, dispatch }) => {
             useExtreme={state.config.useExtreme}
             useBanned={state.config.useBanned}
             dispatch={dispatch}
+            costs={state.costs}
           />
         )}
       </>
@@ -105,7 +106,6 @@ const RewardsView = ({ state, twitchLogin, dispatch }) => {
 const Config = () => {
   const auth = useAuth();
   const config = useConfig();
-
   
   const {
     setIsLoading,

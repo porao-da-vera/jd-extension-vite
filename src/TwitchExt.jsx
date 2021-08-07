@@ -46,45 +46,56 @@ export const TwitchExtProvider = ({ children }) => {
         setAuth(newAuth);
       });
     });
+    twitch.configuration.onChanged(function(){
+      const broadcaster = twitch.configuration.broadcaster;
+      console.info('config from twitch: ', broadcaster)
+        if (broadcaster?.content) {
+          try {
+            const config = JSON.parse(broadcaster.content);
+            setConfig(config);
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          // looks like twitch ext doesn't like to check and set right after it
+          setTimeout(() => {
+            console.info("setConfig");
+            setTwitchConfig(defaultConfig, () => {
+              initConfig();
+              setConfig(defaultConfig);
+            });
+          }, 50);
+        }
+    })
   }, []);
   useEffect(() => {
-    if (auth) {
-      // init config
-      const configJson = twitch.configuration.broadcaster?.content;
+    // if (auth && !config) {
+    //   // init config
+    //   try {
+    //     const broadcaster = twitch.configuration.broadcaster;
+    //     if (broadcaster?.content) {
+    //       console.info(broadcaster.content);
+    //       try {
+    //         const config = JSON.parse(broadcaster.content);
+    //         setConfig(config);
+    //       } catch (e) {
+    //         console.log(e);
+    //       }
+    //     } else {
+    //       // looks like twitch ext doesn't like to check and set right after it
+    //       setTimeout(() => {
+    //         console.info("setConfig");
+    //         setTwitchConfig(defaultConfig, () => {
+    //           initConfig();
+    //           setConfig(defaultConfig);
+    //         });
+    //       }, 50);
+    //     }
+    //   } catch (error) {
+    //     throw new Error(error);
+    //   }
 
-      console.info(configJson, auth);
-      if (configJson) {
-        try {
-          setConfig(JSON.parse(configJson));
-        } catch (error) {
-          throw new Error(error);
-        }
-      } else {
-        try {
-          const broadcaster = twitch.configuration.broadcaster;
-          console.info(broadcaster?.content);
-          if (broadcaster?.content) {
-            try {
-              const config = JSON.parse(broadcaster.content);
-              setConfig(config);
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            // looks like twitch ext doesn't like to check and set right after it
-            setTimeout(() => {
-              console.info("setConfig");
-              setTwitchConfig(defaultConfig, () => {
-                initConfig();
-                setConfig(defaultConfig);
-              });
-            }, 50);
-          }
-        } catch (error) {
-          throw new Error(error);
-        }
-      }
-    }
+    // }
     window.Twitch.ext.listen("broadcast", (target, contentType, msg) =>
       updateConfigFromListener(target, contentType, msg, config, setConfig)
     );
