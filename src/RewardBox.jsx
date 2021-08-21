@@ -41,12 +41,20 @@ const DifficultySelector = ({ selected, onSelect }) => {
   });
 };
 
-const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
+const RewardBox = ({ reward, range, type, disabled, dispatch, handleFixRewards  }) => {
   const [title, setTitle] = useState(reward?.title);
   const [cost, setCost] = useState(reward?.cost);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if(!!reward) {
+      console.info(reward)
+      setTitle(reward.title);
+      setCost(reward.cost);
+    }
+  }, [reward])
 
   const handleUpdateReward = () => {
     if (reward.title === title && reward.cost === cost) {
@@ -74,11 +82,12 @@ const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
     }
   };
 
+
   const getButtonConfig = () => {
-    if (title === undefined) {
+    if (!reward) {
       return {
-        onClick: handleUpdateReward,
-        icon: <CheckIcon size={16} />,
+        onClick: handleFixRewards,
+        icon: <FixIcon size={16} />,
       };
     }
     if (editing) {
@@ -95,13 +104,13 @@ const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
 
   const buttonConfig = getButtonConfig();
 
-  useEffect(() => {
-    console.info(title);
-  }, [title]);
+  // useEffect(() => {
+  //   console.info(title);
+  // }, [title]);
 
   return (
     <StyledPaper elevation={3}>
-      {title !== undefined && (
+      {reward && (
         <LeftSection>
           {type !== "regular" && (
             <FormControlLabel
@@ -118,7 +127,7 @@ const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
       )}
 
       <RightSection>
-        {title !== undefined && type !== "regular" && `Use ${type} ?`}
+        {!!reward && type !== "regular" && `Use ${type} ?`}
         <TwitchReward>
           <TwitchRewardInfo>
             <Title>
@@ -152,7 +161,7 @@ const RewardBox = ({ reward, range, type, disabled, dispatch }) => {
             {buttonConfig.icon}
           </TwitchRewardEditBtn>
         </TwitchReward>
-        {title !== undefined && (
+        {reward && (
           <Range>
             <DifficultySelector selected={range} />
           </Range>
