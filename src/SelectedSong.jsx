@@ -21,7 +21,10 @@ const SelectedSong = ({
       <ListWarning
         buttonLabel="Back"
         onClick={() =>
-          dispatch({ type: "setIsRequestView", payload: false })
+          dispatch({ type: "setIsRequestView", payload: {
+            view: false,
+            difficulty:  0,
+          } })
         }
       >
         This is already in the list
@@ -33,7 +36,10 @@ const SelectedSong = ({
       <ListWarning
         buttonLabel="Back"
         onClick={() =>
-          dispatch({ type: "setIsRequestView", payload: false })
+          dispatch({ type: "setIsRequestView", payload: {
+            view: false,
+            difficulty: 0,
+          } })
         }
       >
         This is already in the list

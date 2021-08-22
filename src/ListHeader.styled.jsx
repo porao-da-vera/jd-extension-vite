@@ -11,14 +11,14 @@ export const Title = styled.div`
   display: flex;
   margin-bottom: 4px;
   color: #fff;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   text-align: center;
 `;
 
 const sharedCornerStyle = css`
-  width: 72px;
-  height: 28px;
+  width: 28px;
+  height: 100%;
   display: flex;
   align-items: center;
 `;
@@ -30,4 +30,13 @@ export const CornerRight = styled.div`
 export const CornerLeft = styled.div`
   ${sharedCornerStyle}
   justify-content: flex-start;
+`;
+
+export const Tikets = styled.div`
+  & > button {
+    margin-right: 2px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 `;

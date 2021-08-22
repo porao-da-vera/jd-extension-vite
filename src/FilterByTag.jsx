@@ -1,14 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Wrapper, SectionWrapper, Tag } from "./FilterByTag.styled.jsx";
 import { DIFFICULTIES, MODES } from "./constants";
 
 export const filterTypes = ["difficulty", "mode"];
 
 const Section = ({ tags, selected, onSelect }) => {
+  
   return (
     <SectionWrapper>
       {tags.map((tag, idx) => (
-        <Tag selected={selected === idx} onClick={() => onSelect(idx)}>{tag ?? "X"}</Tag>
+        <Tag key={idx} selected={selected === idx} onClick={() => onSelect(idx)}>{tag ?? "X"}</Tag>
       ))}
     </SectionWrapper>
   );

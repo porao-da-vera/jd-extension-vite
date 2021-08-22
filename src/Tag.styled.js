@@ -26,7 +26,7 @@ export const StyledTag = styled.div`
   display: inline-flex;
   padding: 2px 4px;
   border-radius: 4px;
-  background-color: ${(props) => transparentize(statesValues[props.state], typesValues[props.type])};
+  background-color: ${(props) => transparentize(statesValues[props.state || states.regular], typesValues[props.type || types.regular])};
   font-size: 10px;
   text-transform: uppercase;
   color: #fff;

@@ -4,7 +4,7 @@ import PanelSongList from "./PanelSongList";
 import { addSongToList } from "./api";
 import ListWarning from "./ListWarning";
 import FilterSection from "./FilterSection";
-import { PanelViiewWrapper } from "./PanelView.styled";
+import { PanelViewWrapper } from "./PanelView.styled";
 
 const handleAddSong = (song, dispatch, display_name) => {
   // song.difficulty >= 4 && (song = { ...song, difficulty: 4 });
@@ -16,7 +16,7 @@ const handleAddSong = (song, dispatch, display_name) => {
   addSongToList({ ...newSong, danced: false }, display_name)
     .then((res) => {
       if (res.status === 409) {
-        console.log("errorMsg", res);
+        
         dispatch({ type: "setAddSongError", payload: "duplicated song" });
       } else {
         dispatch({
@@ -30,7 +30,7 @@ const handleAddSong = (song, dispatch, display_name) => {
     });
 };
 
-const PanelViiew = ({ state, dispatch, auth }) => {
+const PanelView = ({ state, dispatch, auth }) => {
   const {
     loading,
     selectedSong,
@@ -95,7 +95,7 @@ const PanelViiew = ({ state, dispatch, auth }) => {
         }}
         dispatch={dispatch}
       />
-      <PanelViiewWrapper>
+      <PanelViewWrapper>
         <PanelSongList
           listStatus={state.listConfig.status}
           dispatch={dispatch}
@@ -106,9 +106,9 @@ const PanelViiew = ({ state, dispatch, auth }) => {
           bannedIds={bannedIds}
           requestedIds={state.requestedSongs.map(song => song.song.id)}
         />
-      </PanelViiewWrapper>
+      </PanelViewWrapper>
     </>
   );
 };
 
-export default PanelViiew;
+export default PanelView;

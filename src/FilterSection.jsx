@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Filter, SearchWrapper, Regular } from "./FilterSection.styled";
-import { CloseIcon, FilterIcon } from "./icons";
+import { CloseIcon, CrossIcon } from "./icons";
 import IconButton from "./IconButton";
 import { COLORS } from "./constants";
 import FilterByTag from "./FilterByTag";
 
 const FilterSection = ({ filter, dispatch }) => {
-  const [advanced, setAdvanced] = useState(false);
   const { searchString, difficulty, mode } = filter;
   const clearFilter = () =>
     dispatch({
@@ -16,6 +15,7 @@ const FilterSection = ({ filter, dispatch }) => {
   const handleFilter = (type, value) => {
     dispatch({ type: "setFilter", payload: { ...filter, [type]: value } });
   };
+ 
   useEffect(() => {
     return () => {
       clearFilter();
@@ -40,20 +40,17 @@ const FilterSection = ({ filter, dispatch }) => {
         <IconButton
           iconColor={COLORS.LIGHT_PURPLE}
           color="#000"
-          active={advanced}
           size={24}
-          onClick={() => setAdvanced(!advanced)}
+          onClick={clearFilter}
         >
-          <FilterIcon />
+          <CrossIcon />
         </IconButton>
       </Regular>
-      {advanced && (
         <FilterByTag
           difficulty={difficulty}
           mode={mode}
           onSelect={handleFilter}
         />
-      )}
     </Filter>
   );
 };

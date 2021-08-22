@@ -1,9 +1,10 @@
-import React from "react";
-import { Header, Title, CornerRight, CornerLeft } from "./ListHeader.styled";
-import TicketIcon from "./TicketIcon";
+import React, { useEffect } from "react";
+import { Header, Title, CornerRight, CornerLeft, Tikets } from "./ListHeader.styled";
 import IconButton from "./IconButton";
 import { ArrowBack, LibraryMusic } from "./icons";
-import { LIST_STATUS } from "./constants";
+import { LIST_STATUS, REWARDS } from "./constants";
+import TicketsDisplay from "./TicketsDisplay";
+import { useConfig } from "./TwitchExt";
 
 const RightBtn = ({
   isRequestView,
@@ -12,14 +13,6 @@ const RightBtn = ({
   tickets,
   handleRequestClick,
 }) => {
-  if (isRequestView && showTickets) {
-    return (
-      <>
-        {tickets}&nbsp;
-        <TicketIcon color="#fff" size="12" />
-      </>
-    );
-  }
   if (listStatus !== LIST_STATUS.PAUSED && !isRequestView) {
     return (
       <IconButton
@@ -41,7 +34,10 @@ const ListHeader = ({
   isRequestView,
   listStatus,
   showTickets,
-}) => {
+}) => { 
+
+  const config = useConfig();
+
   return (
     <Header>
       <Title>
@@ -57,16 +53,21 @@ const ListHeader = ({
             </IconButton>
           )}
         </CornerLeft>
-        <span>Just Dance Track list</span>
-        <CornerRight>
-          <RightBtn
-            showTickets={showTickets}
-            isRequestView={isRequestView}
-            listStatus={listStatus}
-            tickets={tickets}
-            handleRequestClick={handleRequestClick}
-          />
-        </CornerRight>
+        <Tikets>
+          {tickets &&
+            Object.entries(tickets).reduce((acc, [key, value], index) => {
+              if((key === REWARDS.BANNED && !config.useBanned) || (key === REWARDS.EXTREME && !config.useExtreme)) return acc;
+              acc.push(<TicketsDisplay
+                  key={index}
+                  type={key === REWARDS.REGULAR ? "song" : key}
+                  tickets={value}
+                  disabled={value === 0 || isRequestView}
+                  onClick={(e) => handleRequestClick(e, key, value)}
+                />
+              );
+              return acc;
+            }, [])}
+        </Tikets>
       </Title>
     </Header>
   );

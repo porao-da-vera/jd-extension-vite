@@ -17,11 +17,11 @@ const StyledButton = style.button`
   user-select: none;
   text-transform: uppercase;
   transition: all 150ms ease;
-  cursor:pointer;
+  cursor:${(props) => props.disabled? "default":"pointer"};
   border-radius:4px;
   color: ${(props) => props.color};
   ${(props) => {
-    if (props.variant !== btnVariants.outline) {
+    if (props.variant !== btnVariants.outline && !props.disabled) {
       return `background-color:${props.bgColor};`;
     }
     return `background:none;`;
@@ -29,6 +29,9 @@ const StyledButton = style.button`
   padding:4px 8px;
   &:hover{
     ${(props) => {
+      if (props.disabled) {
+        return `background:none;`;
+      }
       if (props.variant === btnVariants.raised) {
         return `background-color: ${lighten(0.1, props.bgColor)};`;
       }

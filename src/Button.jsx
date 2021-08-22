@@ -8,6 +8,7 @@ const Button = ({
   color = "#fff",
   bgColor = COLORS.DARK_PINK,
   variant = btnVariants.raised,
+  disabled = false
 }) => {
   return (
     <StyledButton
@@ -15,6 +16,7 @@ const Button = ({
       color={color}
       bgColor={bgColor}
       variant={btnVariants[variant]}
+      disabled={disabled}
     >
       {children}
     </StyledButton>

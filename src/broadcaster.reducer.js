@@ -61,6 +61,7 @@ function reducer(state, { type, payload }) {
         songList: payload,
       };
     case SONG_ACTION_TYPE.ADD:
+      if(state.songList.find(item => item.id === payload.change.song.id)) return state;
       return {
         ...state,
         songList: [...state.songList, payload.change],

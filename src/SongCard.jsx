@@ -1,5 +1,4 @@
 import React from "react";
-import TicketIcon from "./TicketIcon";
 import { Card, Thumb, Source, Info } from "./SongCard.style";
 import SongControls from "./SongControls";
 import Spinner from "./Spinner";
@@ -63,13 +62,7 @@ const SongCard = ({
           <b>Artist: </b>
           {artist}
         </p>
-        <div>
-          {!!Number(cost) && (
-            <Tag>
-              {cost}&nbsp;
-              <TicketIcon />
-            </Tag>
-          )}
+        <div>          
           <Tag type={difficulty === 5 ? types.banned : types.regular}>
             {DIFFICULTIES[difficulty]}
           </Tag>

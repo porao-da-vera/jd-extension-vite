@@ -1,13 +1,12 @@
-
 import React, { useEffect, useReducer, useContext } from "react";
-import { LIST_STATUS } from "./constants";
+import { LIST_STATUS, DIFFICULTIES } from "./constants";
 import { Scope, Main } from "./Panel.styled";
 import { handleFilter, viewerListener, mapSongList } from "./Panel.helpers";
 import { getGameList } from "./api";
 import useDebounce from "./useDebounce";
 import ListHeader from "./ListHeader";
 import { initialState, reducer } from "./PanelReducer";
-import PanelViiew from "./PanelView";
+import PanelView from "./PanelView";
 import Spinner from "./Spinner";
 import SharePermission from "./SharePermission";
 import RequestedSongList from "./RequestedSongList";
@@ -36,8 +35,8 @@ const Panel = () => {
         });
       viewerListener({
         opaque_user_id: auth.opaque_user_id,
-        dispatch
-      });      
+        dispatch,
+      });
     }
   }, [auth]);
 
@@ -53,8 +52,11 @@ const Panel = () => {
   // if pause reset request view
   useEffect(() => {
     if (state.listConfig) {
-      if (state.listConfig.status === LIST_STATUS.PAUSED) {
-        dispatch({ type: "setIsRequestView", payload: false });
+      if (state.listConfig?.status === LIST_STATUS.PAUSED) {
+        dispatch({ type: "setIsRequestView", payload: {
+          view: false,
+          difficulty: 0,
+        } });
       }
     }
   }, [state.listConfig]);
@@ -69,13 +71,24 @@ const Panel = () => {
     });
   }, [debouncedFilter, state.songList]);
 
-  const handleRequestClick = () => {
-    dispatch({ type: "setIsRequestView", payload: !state.isRequestView });
+  const handleRequestClick = (event, type, value) => {
+    if (typeof value === 'number' && value === 0) return;
+    const difficultiesNumber = type ? DIFFICULTIES.findIndex(item => item && item.toLowerCase() === type) : 0;
+
+    dispatch({
+      type: "setIsRequestView",
+      payload: {
+        view: !state.isRequestView,
+        difficulty: difficultiesNumber > 3 ? difficultiesNumber : 0,
+      },
+    });
   };
 
   switch (true) {
     case !twitch.viewer.isLinked:
-      return <SharePermission requestPermission={twitch.actions.requestIdShare} />;
+      return (
+        <SharePermission requestPermission={twitch.actions.requestIdShare} />
+      );
     case state.tickets === -1 ||
       state.songList.length === 0 ||
       !config ||
@@ -91,7 +104,7 @@ const Panel = () => {
             isRequestView={state.isRequestView}
             tickets={state.tickets}
             showTickets={config.useRewards}
-            listStatus={state.listConfig.status}
+            listStatus={state.listConfig?.status}
           />
           <ListWarning>
             You don't have any tickets 😐.
@@ -99,7 +112,7 @@ const Panel = () => {
           </ListWarning>
         </>
       );
-    case state.listConfig.status === LIST_STATUS.CLOSED:
+    case state.listConfig?.status === LIST_STATUS.CLOSED:
       return (
         <ListWarning>
           The list is not open yet 😐.
@@ -111,18 +124,21 @@ const Panel = () => {
         <>
           <ListHeader
             handleRequestClick={handleRequestClick}
-            listStatus={state.listConfig.status}
+            isRequestView={state.isRequestView}
+            tickets={state.tickets}
+            showTickets={config.useRewards}
+            listStatus={state.listConfig?.status}
           />
           <Main>
             <ListWarning>
-              {state.listConfig.status === LIST_STATUS.ACTIVE
+              {state.listConfig?.status === LIST_STATUS.ACTIVE
                 ? 'There aren\'t musics here yet 😶.\n You can be the first to ask one, by clicking on the "+" button at the top right corner'
                 : 'There aren\'t musics here yet 😶.\n As soon as the streamer allow, you can be the first by clicking on the "+" button at the top right corner.'}
             </ListWarning>
           </Main>
         </>
       );
-    case state.isRequestView && state.listConfig.status === LIST_STATUS.ACTIVE:
+    case state.isRequestView && state.listConfig?.status === LIST_STATUS.ACTIVE:
       return (
         <>
           <ListHeader
@@ -130,10 +146,10 @@ const Panel = () => {
             tickets={state.tickets}
             showTickets={config.useRewards}
             isRequestView={state.isRequestView}
-            listStatus={state.listConfig.status}
+            listStatus={state.listConfig?.status}
           />
           <Main>
-            <PanelViiew auth={auth} dispatch={dispatch} state={state} />
+            <PanelView auth={auth} dispatch={dispatch} state={state} />
           </Main>
         </>
       );
@@ -145,7 +161,7 @@ const Panel = () => {
             isRequestView={state.isRequestView}
             showTickets={config.useRewards}
             tickets={state.tickets}
-            listStatus={state.listConfig.status}
+            listStatus={state.listConfig?.status}
           />
           <Main>
             <RequestedSongList
@@ -155,7 +171,7 @@ const Panel = () => {
           </Main>
         </>
       );
-  };
+  }
 };
 
 export default Panel;

@@ -131,7 +131,7 @@ export const DancedIcon = ({ size = 24 }) => {
   );
 };
 
-export const EditIcon = ({ size }) => {
+export const EditIcon = ({ size = 24  }) => {
   return (
     <svg viewBox={`0 0 24 24`} width={size} height={size}>
       <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
@@ -139,22 +139,40 @@ export const EditIcon = ({ size }) => {
   );
 };
 
-export const CheckIcon = ({ size }) => {
+export const CheckIcon = ({ size = 24 }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24">
       <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
     </svg>
   );
 };
-export const FixIcon = ({ size }) => {
+export const FixIcon = ({ size = 24 }) => {
   return (
-    <svg
-      
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-    >
+    <svg width={size} height={size} viewBox="0 0 24 24">
       <path d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z" />
+    </svg>
+  );
+};
+
+export const CrossIcon = ({ size = 24 }) => {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24">
+      <path d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z" />
+    </svg>
+  );
+};
+
+export const TicketIcon = ({ size = 24 , color}) => {
+  return (
+    <svg viewBox="0 0 15 15" width={size} height={size} >
+      <path
+        fill={color}
+        d="M14.371,3.547c-0.044,0.085-0.098,0.165-0.167,0.234c-0.478,0.478-1.393,0.338-2.043-0.312
+          c-0.65-0.65-0.79-1.565-0.312-2.043c0.069-0.069,0.148-0.124,0.233-0.167L10.822,0L8.964,1.859l0.465,0.465L9.14,2.613L8.675,2.148
+          l-8.674,8.675l1.226,1.227c0.479-0.479,1.393-0.34,2.043,0.311s0.79,1.564,0.312,2.043l1.226,1.227L15.63,4.807L14.371,3.547z
+          M10.567,4.038L9.854,3.325l0.288-0.289l0.713,0.713L10.567,4.038z M11.993,5.464L11.28,4.751l0.288-0.288l0.714,0.713
+          L11.993,5.464z M13.42,6.891l-0.714-0.713l0.289-0.288l0.713,0.713L13.42,6.891z"
+      />
     </svg>
   );
 };

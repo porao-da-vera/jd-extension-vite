@@ -1,10 +1,20 @@
+import { REWARDS } from "./constants";
+
+const defaultTickets = Object.keys(REWARDS).reduce((acc, cur) => {
+  const label = REWARDS[cur];
+  if (label !== REWARDS.RAID && label !== REWARDS.SUB) {
+    acc[label] = 0;
+  }
+  return acc;
+}, {});
+
 const initialState = {
   songList: [],
   filteredSongs: [],
   requestedSongs: [],
   display_name: "",
   filter: { searchString: "", difficulty: 0, mode: 0 },
-  tickets: -1,
+  tickets: defaultTickets,
   selectedSong: null,
   auth: null,
   loading: true,
@@ -58,9 +68,14 @@ function reducer(state, { type, payload }) {
         requestedSongs: [],
       };
     case LIST_ACTION_TYPE.DELETE:
-      console.info(payload);
       const userId = window.Twitch.ext.viewer.id;
-      const tickets = payload.ticketsToReturn[userId] + state.tickets;
+      const tickets = payload.ticketsToReturn[userId].reduce(
+        (acc, cur) => {
+          acc[cur] += 1;
+          return acc;
+        },
+        { ...state.tickets }
+      );
       return {
         ...state,
         listConfig: payload.listConfig,
@@ -90,6 +105,7 @@ function reducer(state, { type, payload }) {
         filteredSongs: payload,
       };
     case "setFilter":
+      
       return {
         ...state,
         filter: payload,
@@ -119,18 +135,20 @@ function reducer(state, { type, payload }) {
         requestedSongs: payload.requestedSongs,
       };
     case "setIsRequestView":
-      if (!payload) {
+      if (!payload.view) {
         const { selectedSong, handleAddSongError } = initialState;
         return {
           ...state,
-          isRequestView: payload,
+          isRequestView: payload.view,
           selectedSong,
           handleAddSongError,
         };
       }
+      
       return {
         ...state,
-        isRequestView: payload,
+        filter: { ...state.filter, difficulty: payload.difficulty },
+        isRequestView: payload.view,
       };
 
     case "setError":
@@ -139,6 +157,10 @@ function reducer(state, { type, payload }) {
       };
 
     case SONG_ACTION_TYPE.ADD:
+      if (
+        state.requestedSongs.find((item) => item.id === payload.change.song.id)
+      )
+        return state;
       return {
         ...state,
         requestedSongs: [...state.requestedSongs, payload.change],

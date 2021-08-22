@@ -46,8 +46,8 @@ export const MODES = [null, "Solo", "Duet", "Trio", "Dance Crew"];
 
 export const REWARDS = {
   REGULAR: "regular",
-  BANNED: "banned",
   EXTREME: "extreme",
-  RAID: "raid",
+  BANNED: "banned",
   SUB: "sub",
+  RAID: "raid",
 };
