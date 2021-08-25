@@ -23,12 +23,14 @@ body,
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
 }
 
 body {
   display: flex;
   font-family: "Viga", sans-serif;
   -webkit-font-smoothing: antialiased;
+  background-color: #fff;
 }
 
 body * {

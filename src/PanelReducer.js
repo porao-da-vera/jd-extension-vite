@@ -69,7 +69,8 @@ function reducer(state, { type, payload }) {
       };
     case LIST_ACTION_TYPE.DELETE:
       const userId = window.Twitch.ext.viewer.id;
-      const tickets = payload.ticketsToReturn[userId].reduce(
+      const ticketsToReturn = payload.ticketsToReturn[userId] ?? [];
+      const tickets = ticketsToReturn.reduce(
         (acc, cur) => {
           acc[cur] += 1;
           return acc;
