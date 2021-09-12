@@ -1,9 +1,9 @@
 import React from "react";
 import { SpinnerStyled, SpinnerWrapper } from "./Spinner.styled";
 
-const Spinner = () => {
+const Spinner = ({posAbsolute = false}) => {
   return (
-    <SpinnerWrapper>
+    <SpinnerWrapper posAbsolute={posAbsolute}>
       <SpinnerStyled />
     </SpinnerWrapper>
   );

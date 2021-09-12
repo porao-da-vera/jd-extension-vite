@@ -12,7 +12,7 @@ const RewardsConfig = ({ useBanned, useExtreme, dispatch, costs }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    console.log("useEffect rewards config", rewards);
+    
     if (!rewards.length) {
       setIsLoading(true);
       validateAndRefresh()

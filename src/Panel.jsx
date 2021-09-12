@@ -1,7 +1,11 @@
 import React, { useEffect, useReducer, useContext } from "react";
 import { LIST_STATUS, DIFFICULTIES } from "./constants";
 import { Scope, Main } from "./Panel.styled";
-import { handleFilter, viewerListener, mapSongList } from "./Panel.helpers";
+import {
+  handleFilter,
+  viewerListener,
+  mapSongList,
+} from "./Panel.helpers";
 import { getGameList } from "./api";
 import useDebounce from "./useDebounce";
 import ListHeader from "./ListHeader";
@@ -53,10 +57,13 @@ const Panel = () => {
   useEffect(() => {
     if (state.listConfig) {
       if (state.listConfig?.status === LIST_STATUS.PAUSED) {
-        dispatch({ type: "setIsRequestView", payload: {
-          view: false,
-          difficulty: 0,
-        } });
+        dispatch({
+          type: "setIsRequestView",
+          payload: {
+            view: false,
+            difficulty: 0,
+          },
+        });
       }
     }
   }, [state.listConfig]);
@@ -72,8 +79,10 @@ const Panel = () => {
   }, [debouncedFilter, state.songList]);
 
   const handleRequestClick = (event, type, value) => {
-    if (typeof value === 'number' && value === 0) return;
-    const difficultiesNumber = type ? DIFFICULTIES.findIndex(item => item && item.toLowerCase() === type) : 0;
+    if (typeof value === "number" && value === 0) return;
+    const difficultiesNumber = type
+      ? DIFFICULTIES.findIndex((item) => item && item.toLowerCase() === type)
+      : 0;
 
     dispatch({
       type: "setIsRequestView",
@@ -130,11 +139,11 @@ const Panel = () => {
             listStatus={state.listConfig?.status}
           />
           <Main>
-            <ListWarning>
-              {state.listConfig?.status === LIST_STATUS.ACTIVE
-                ? 'There aren\'t musics here yet 😶.\n You can be the first to ask one, by clicking on the "+" button at the top right corner'
-                : 'There aren\'t musics here yet 😶.\n As soon as the streamer allow, you can be the first by clicking on the "+" button at the top right corner.'}
-            </ListWarning>
+              <ListWarning>
+                {state.listConfig?.status === LIST_STATUS.ACTIVE
+                  ? 'There aren\'t musics here yet 😶.\n You can be the first to ask one, by clicking on the "+" button at the top right corner'
+                  : 'There aren\'t musics here yet 😶.\n As soon as the streamer allow, you can be the first by clicking on the "+" button at the top right corner.'}
+              </ListWarning>
           </Main>
         </>
       );
@@ -149,7 +158,7 @@ const Panel = () => {
             listStatus={state.listConfig?.status}
           />
           <Main>
-            <PanelView auth={auth} dispatch={dispatch} state={state} />
+              <PanelView auth={auth} dispatch={dispatch} state={state} />
           </Main>
         </>
       );
@@ -164,10 +173,10 @@ const Panel = () => {
             listStatus={state.listConfig?.status}
           />
           <Main>
-            <RequestedSongList
-              songList={state.requestedSongs}
-              showControls={false}
-            />
+              <RequestedSongList
+                songList={state.requestedSongs}
+                showControls={false}
+              />
           </Main>
         </>
       );

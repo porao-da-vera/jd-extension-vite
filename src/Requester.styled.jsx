@@ -15,10 +15,10 @@ export const Wrapper = styled.div`
 
 export const Name = styled.div`
   box-sizing: border-box;
-  width: calc(100% - 10px);
+  width: calc(100% - 24px);
   text-align: center;
   position: relative;
-  margin: 0 5px 5px 5px;
+  margin: 0 12px;
   padding: 4px;
   font-size: 14px;
   background-color: ${COLORS.BLUE};

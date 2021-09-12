@@ -27,9 +27,8 @@ export const TwitchExtProvider = ({ children }) => {
   const [config, setConfig] = useState(null);
   // isLinked
 
-  useEffect(() => {
-    console.log('auth/config: ', auth, config )
-  }, [auth, config]);
+  
+
   useEffect(() => {
     twitch.onAuthorized((auth) => {
       const decodedToken = jwtDecode(auth.token);

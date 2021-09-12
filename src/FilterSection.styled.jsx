@@ -4,8 +4,9 @@ import { COLORS } from "./constants";
 export const Filter = styled.div`
   display: flex;
   width: 100%;
-  padding: 2px 0;
+  padding: 4px;
   flex-direction: column;
+  box-shadow: 1px 0 6px #666;
 `;
 export const Regular = styled.div`
   display: flex;

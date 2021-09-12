@@ -2,6 +2,7 @@ const initialState = {
   user: null,
   songList: [],
   listConfig: null,
+  isLoading: false
 };
 
 const SONG_ACTION_TYPE = {
@@ -59,6 +60,11 @@ function reducer(state, { type, payload }) {
       return {
         ...state,
         songList: payload,
+      };
+      case "setLoading":
+      return {
+        ...state,
+        isLoading: payload,
       };
     case SONG_ACTION_TYPE.ADD:
       if(state.songList.find(item => item.id === payload.change.song.id)) return state;

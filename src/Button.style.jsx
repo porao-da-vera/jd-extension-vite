@@ -18,6 +18,7 @@ const StyledButton = style.button`
   text-transform: uppercase;
   transition: all 150ms ease;
   cursor:${(props) => props.disabled? "default":"pointer"};
+  box-shadow:${(props) => props.disabled? "none":"1px 1px 4px #666"};
   border-radius:4px;
   color: ${(props) => props.color};
   ${(props) => {

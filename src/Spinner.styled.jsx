@@ -59,4 +59,5 @@ export const SpinnerWrapper = styled.div`
   z-index: 2;
   overflow: hidden;
   margin: 0;
+  ${props=> props.posAbsolute && "position:absolute; top:4px;"}
 `;

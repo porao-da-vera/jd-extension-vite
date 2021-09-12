@@ -59,8 +59,7 @@ function reducer(state, { type, payload }) {
         ...state,
         userInfo: payload,
       };
-    case "setBroadcasterType":
-      console.log(payload);
+    case "setBroadcasterType":      
       return {
         ...state,
         config: { ...state.config, broadcasterType: payload },

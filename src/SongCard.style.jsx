@@ -4,7 +4,7 @@ import { transparentize } from 'polished';
 import { COLORS } from "./constants";
 
 export const Card = styled.div`
-  width: 100%;
+  width: calc(100% - 8px);
   position: relative;
   box-sizing: border-box;
   display: inline-flex;
@@ -14,7 +14,7 @@ export const Card = styled.div`
   font-size: 14px;
   color: ${COLORS.DARK_GRAY};
   padding: 8px;
-  margin: 4px 0;
+  margin: 4px;
   cursor: ${(props) => (props.clickable ? "pointer" : "default")};
   transition: all 150ms ease;
   z-index: 1;

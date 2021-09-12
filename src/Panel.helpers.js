@@ -1,16 +1,40 @@
 import { getInitialViewer } from "./api";
+import Fuse from "fuse.js";
 
 export const handleFilter = (filter, songList) => {
   const { searchString, difficulty, mode } = filter;
-
-  const filtered = songList.filter((song) => {
+  let filteredSongs = [...songList];
+  if (searchString) {
+    // fuzzy search title and artist
+    const options = {
+      keys: [
+        {
+          name: "name",
+          weight: 2,
+        },
+        {
+          name: "artist",
+          weight: 1,
+        }
+      ],
+      includeScore: true,
+      location: 0,
+      threshold: 0.1,
+      sortFn: (a,b) => {
+        return (a.score - b.score) || a.item[0].v.indexOf(searchString) - b.item[0].v.indexOf(searchString) || a.item[1].v.indexOf(searchString) - b.item[1].v.indexOf(searchString) || a.refIndex - b.refIndex;
+      }
+    };
+    const fuse = new Fuse(filteredSongs, options);
+    filteredSongs = fuse.search(searchString).map((res) => res.item);
+  }
+  const filtered = filteredSongs.filter((song) => {
     return (
-      (song.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1 ||
-        song.artist.toLowerCase().indexOf(searchString.toLowerCase()) > -1) &&
       (!difficulty || difficulty === song.difficulty) &&
       (!mode || mode === song.coaches)
     );
   });
+
+
   return filtered;
 };
 
@@ -34,7 +58,7 @@ export const viewerListener = ({ opaque_user_id, dispatch }) => {
       if (tickets) {
         payload.tickets = tickets;
       }
-      console.log(tickets);
+    
       dispatch({
         type: "setViewerInit",
         payload,

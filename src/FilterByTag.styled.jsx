@@ -10,8 +10,8 @@ export const Wrapper = styled.div`
 export const SectionWrapper = styled.div`
   display: flex;
   padding: 4px 0 0;
-  &:last-child {
-    padding-bottom: 4px;
+  &:first-child {
+    padding-top: 0;
   }
 `;
 export const Tag = styled.button`
