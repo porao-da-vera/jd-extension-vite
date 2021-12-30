@@ -107,7 +107,7 @@
     "hasChatSupport": true,
     "iconUrl": "",
     "iconUrls": {},
-    "id": "uvhoxn82f1p3204n3uerbxpvykydkf",
+    "id": "d0sk8gv19khtg2nwfrbb6y67ldabhg",
     "installationCount": -42,
     "liveConfigUrl": "http://localhost:3001/broadcaster.html",
     "name": "Metro-jd-list",
@@ -172,7 +172,7 @@
   },
   "frontendCommand": "yarn local",
   "frontendFolderName": "C:\\Users\\jorda\\projects\\extension-jd",
-  "name": "Metro-jd-list",
+  "name": "Justdance_queue",
   "usingRandomFrontendHostingPort": false,
   "version": 3
 }
