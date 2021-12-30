@@ -17,31 +17,8 @@
         "width": 1280,
         "height": 720
       },
-      "id": "1",
-      "isPopout": false,
-      "label": "",
-      "linked": true,
-      "linkedUserId": "96775663",
-      "opaqueId": "adfasdfasdfasdfas",
-      "orientation": "Portrait",
-      "type": "panel",
-      "viewerType": "Logged-In Viewer"
-    },
-    {
-      "channelId": "96775663",
-      "configurationAnchor": "component",
-      "displayChannelName": "metrodavania",
-      "features": {
-        "isBitsEnabled": false,
-        "isChatEnabled": false,
-        "isSubscriptionStatusAvailable": false
-      },
-      "frameSize": {
-        "width": 1280,
-        "height": 720
-      },
-      "id": "2",
-      "isPopout": false,
+      "id": "3",
+      "isPopout": true,
       "label": "",
       "linked": true,
       "linkedUserId": "265737932",
@@ -67,8 +44,9 @@
       "label": "",
       "linked": true,
       "linkedUserId": "265737932",
+      "opaqueId": "U96775663",
       "orientation": "Portrait",
-      "type": "component",
+      "type": "panel",
       "viewerType": "Logged-In Viewer"
     },
     {
