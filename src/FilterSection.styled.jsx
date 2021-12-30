@@ -6,7 +6,7 @@ export const Filter = styled.div`
   width: 100%;
   padding: 4px;
   flex-direction: column;
-  box-shadow: 1px 0 6px #666;
+  border-bottom: solid 2px ${COLORS.PURPLE};
 `;
 export const Regular = styled.div`
   display: flex;
@@ -38,13 +38,13 @@ export const SearchWrapper = styled.div`
     border-radius: 8px;
   }
 
-  button{
+  button {
     border: none;
-    background: transparent;    
+    background: transparent;
     cursor: pointer;
 
-    &:hover{
-      fill: ${COLORS.RED};      
+    &:hover {
+      fill: ${COLORS.RED};
     }
   }
 `;

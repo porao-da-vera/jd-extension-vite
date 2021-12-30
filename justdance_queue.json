@@ -48,28 +48,6 @@
       "orientation": "Portrait",
       "type": "panel",
       "viewerType": "Logged-In Viewer"
-    },
-    {
-      "channelId": "96775663",
-      "configurationAnchor": "panel",
-      "displayChannelName": "metrodavania",
-      "features": {
-        "isBitsEnabled": false,
-        "isChatEnabled": false,
-        "isSubscriptionStatusAvailable": false
-      },
-      "frameSize": {
-        "width": 1280,
-        "height": 720
-      },
-      "id": "5",
-      "isPopout": false,
-      "label": "",
-      "linked": true,
-      "linkedUserId": "265737932",
-      "orientation": "Portrait",
-      "type": "config",
-      "viewerType": "Broadcaster"
     }
   ],
   "manifest": {

@@ -1,11 +1,7 @@
 import React, { useEffect, useReducer, useContext } from "react";
 import { LIST_STATUS, DIFFICULTIES } from "./constants";
 import { Scope, Main } from "./Panel.styled";
-import {
-  handleFilter,
-  viewerListener,
-  mapSongList,
-} from "./Panel.helpers";
+import { handleFilter, viewerListener, mapSongList } from "./Panel.helpers";
 import { getGameList } from "./api";
 import useDebounce from "./useDebounce";
 import ListHeader from "./ListHeader";
@@ -25,6 +21,7 @@ const Panel = () => {
   const debouncedFilter = useDebounce(state.filter, 500);
 
   useEffect(() => {
+    console.log(auth);
     if (auth) {
       getGameList()
         .then((data) => {
@@ -139,11 +136,11 @@ const Panel = () => {
             listStatus={state.listConfig?.status}
           />
           <Main>
-              <ListWarning>
-                {state.listConfig?.status === LIST_STATUS.ACTIVE
-                  ? 'There aren\'t musics here yet 😶.\n You can be the first to ask one, by clicking on the "+" button at the top right corner'
-                  : 'There aren\'t musics here yet 😶.\n As soon as the streamer allow, you can be the first by clicking on the "+" button at the top right corner.'}
-              </ListWarning>
+            <ListWarning>
+              {state.listConfig?.status === LIST_STATUS.ACTIVE
+                ? 'There aren\'t musics here yet 😶.\n You can be the first to ask one, by clicking on the "+" button at the top right corner'
+                : 'There aren\'t musics here yet 😶.\n As soon as the streamer allow, you can be the first by clicking on the "+" button at the top right corner.'}
+            </ListWarning>
           </Main>
         </>
       );
@@ -158,7 +155,7 @@ const Panel = () => {
             listStatus={state.listConfig?.status}
           />
           <Main>
-              <PanelView auth={auth} dispatch={dispatch} state={state} />
+            <PanelView auth={auth} dispatch={dispatch} state={state} />
           </Main>
         </>
       );
@@ -173,10 +170,10 @@ const Panel = () => {
             listStatus={state.listConfig?.status}
           />
           <Main>
-              <RequestedSongList
-                songList={state.requestedSongs}
-                showControls={false}
-              />
+            <RequestedSongList
+              songList={state.requestedSongs}
+              showControls={false}
+            />
           </Main>
         </>
       );

@@ -1,10 +1,9 @@
 import React from "react";
 import { Card, Thumb, Source, Info } from "./SongCard.style";
 import SongControls from "./SongControls";
-import Spinner from "./Spinner";
 import SongCardOverlay from "./SongCardOverlay";
 import { DIFFICULTIES, MODES, BASE_URL } from "./constants";
-import Tag, { states, types } from './Tag';
+import Tag, { types } from "./Tag";
 
 const SongCard = ({
   id,
@@ -27,6 +26,7 @@ const SongCard = ({
   overlay,
   ...props
 }) => {
+  const imgUrl = new URL(`images/${thumb}`, import.meta.url).href;
   return (
     <Card
       danced={danced}
@@ -49,11 +49,7 @@ const SongCard = ({
     >
       {showOverlay && <SongCardOverlay overlay={overlay} />}
       <Thumb danced={danced}>
-        <img
-          loading="lazy"
-          src={`${BASE_URL}/images/${thumb}`}
-          alt={name + " - " + artist}
-        />
+        <img loading="lazy" src={imgUrl} alt={name + " - " + artist} />
         <Source>{source}</Source>
       </Thumb>
       <Info danced={danced}>
@@ -62,7 +58,7 @@ const SongCard = ({
           <b>Artist: </b>
           {artist}
         </p>
-        <div>          
+        <div>
           <Tag type={difficulty === 5 ? types.banned : types.regular}>
             {DIFFICULTIES[difficulty]}
           </Tag>
