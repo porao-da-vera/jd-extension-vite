@@ -5,7 +5,7 @@ import { LOCAL_STORAGE_TOKEN_KEY } from "./constants";
 import { defaultConfig } from "./Config.helpers";
 import { setTwitchConfig } from "./TwitchApi";
 import { initConfig } from "./api";
-import { asyncLocalStorage } from './utils';
+import { asyncLocalStorage } from "./utils";
 
 export const TwitchExtContext = createContext();
 
@@ -42,31 +42,34 @@ export const TwitchExtProvider = ({ children }) => {
         channelId: channel_id,
         userId: user_id,
       };
-      asyncLocalStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, auth.token).then(() => {
-        setAuth(newAuth);
-      });
+      asyncLocalStorage
+        .setItem(LOCAL_STORAGE_TOKEN_KEY, auth.token)
+        .then(() => {
+          setAuth(newAuth);
+        });
+      console.info("auth from twitch: ", newAuth);
     });
-    twitch.configuration.onChanged(function(){
+    twitch.configuration.onChanged(function () {
       const broadcaster = twitch.configuration.broadcaster;
-      console.info('config from twitch: ', broadcaster)
-        if (broadcaster?.content) {
-          try {
-            const config = JSON.parse(broadcaster.content);
-            setConfig(config);
-          } catch (e) {
-            console.log(e);
-          }
-        } else {
-          // looks like twitch ext doesn't like to check and set right after it
-          setTimeout(() => {
-            console.info("setConfig");
-            setTwitchConfig(defaultConfig, () => {
-              initConfig();
-              setConfig(defaultConfig);
-            });
-          }, 50);
+      console.info("config from twitch: ", broadcaster);
+      if (broadcaster?.content) {
+        try {
+          const config = JSON.parse(broadcaster.content);
+          setConfig(config);
+        } catch (e) {
+          console.log(e);
         }
-    })
+      } else {
+        // looks like twitch ext doesn't like to check and set right after it
+        setTimeout(() => {
+          console.info("setConfig");
+          setTwitchConfig(defaultConfig, () => {
+            initConfig();
+            setConfig(defaultConfig);
+          });
+        }, 50);
+      }
+    });
   }, []);
   useEffect(() => {
     // if (auth && !config) {
